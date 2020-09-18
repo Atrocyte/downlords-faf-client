@@ -489,6 +489,7 @@ public class ReplayService {
     downloadReplay(replayId)
         .thenAccept(this::runReplayFile)
         .exceptionally(throwable -> {
+          log.error("Replay could not be started", throwable);
           notificationService.addImmediateErrorNotification(throwable, "replayCouldNotBeStarted", replayId);
           return null;
         });

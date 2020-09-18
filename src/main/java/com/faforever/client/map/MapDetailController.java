@@ -252,6 +252,7 @@ public class MapDetailController implements Controller<Node> {
     mapService.downloadAndInstallMap(map, progressBar.progressProperty(), progressLabel.textProperty())
         .thenRun(() -> setInstalled(true))
         .exceptionally(throwable -> {
+          log.error("Map installation failed", throwable);
           notificationService.addImmediateErrorNotification(throwable, "mapVault.installationFailed",
               map.getDisplayName(), throwable.getLocalizedMessage());
           setInstalled(false);
@@ -266,6 +267,7 @@ public class MapDetailController implements Controller<Node> {
     mapService.uninstallMap(map)
         .thenRun(() -> setInstalled(false))
         .exceptionally(throwable -> {
+          log.error("Could not delete map", throwable);
           notificationService.addImmediateErrorNotification(throwable, "mapVault.couldNotDeleteMap",
               map.getDisplayName(), throwable.getLocalizedMessage());
           setInstalled(true);
@@ -290,8 +292,8 @@ public class MapDetailController implements Controller<Node> {
       map.setHidden(true);
       renewAuthorControls();
     })).exceptionally(throwable -> {
-      notificationService.addImmediateErrorNotification(throwable, "map.couldNotHide");
       log.error("Could not hide map", throwable);
+      notificationService.addImmediateErrorNotification(throwable, "map.couldNotHide");
       return null;
     });
   }
@@ -303,8 +305,8 @@ public class MapDetailController implements Controller<Node> {
           renewAuthorControls();
         }))
         .exceptionally(throwable -> {
-          notificationService.addImmediateErrorNotification(throwable, "map.couldNotUnrank");
           log.error("Could not unrank map", throwable);
+          notificationService.addImmediateErrorNotification(throwable, "map.couldNotUnrank");
           return null;
         });
   }

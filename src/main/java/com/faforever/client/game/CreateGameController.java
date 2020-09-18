@@ -375,8 +375,8 @@ public class CreateGameController implements Controller<Pane> {
         root.requestFocus();
       }
     } catch (Exception e) {
-      notificationService.addImmediateErrorNotification(e, "mapGenerator.generationFailed");
       log.error("Map generation failed", e);
+      notificationService.addImmediateErrorNotification(e, "mapGenerator.generationFailed");
     }
   }
 
